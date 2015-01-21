@@ -8,7 +8,9 @@
 	<body>
 		<div id="container"></div>
 		<div id="menu">
+			<hr>
 			<?php foreach (glob("content/thumbs/*.*") as $id => $file) echo '<img id="img'.$id.'" img src="'.$file.'" width="50">'; ?>
+			<hr>
 		</div>
 		<script src="/lib/jquery-2.1.0.min.js"></script>
 		<script src="/lib/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js "></script>

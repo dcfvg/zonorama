@@ -34,9 +34,9 @@ jQuery(document).ready(function($) {
 	$( "body" ).keypress(function( event ) {
 		console.log(event.which);
 	  if ( event.which == 32 ) {
-	     event.preventDefault();
-	     $( ".zone" ).not( ".disable" ).addClass("full");
-	     $(	".zone").resizable('destroy').draggable('destroy');
+	    event.preventDefault();
+			$(".zone").remove(".disable");
+	    $(".zone").not( ".disable" ).addClass("full").resizable('destroy').draggable('destroy');
 	  }
 	});
 
