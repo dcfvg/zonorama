@@ -7,23 +7,21 @@
 </head>
 <body id="home">
 	<div class="container-fluid">
-		<div class="row">
-			<h2 class="col-sm-9"><?php echo $page->title() ?></h2>
 
-		</div>
-		<hr>
-		
 		<div class="row">
 			
 			<div class="col-sm-9">
+				<hr>
 				<?php echo kirbytext($page->text()) ?>
 			</div>
 
 			<div class="col-sm-3">
+				<hr>
+					<h3> <a href="/"><?php echo $site->title() ?></a> </h3>
+					<hr>
 				<?php $items = $pages->visible();
 					if($items->count() > 0):
 				?>
-
 				  <div class="list-group">
 				    <?php foreach($pages->visible() as $item): ?>
 				    <a<?php ecco($item->isOpen(), ' class="active"') ?> href="<?php echo $item->url() ?>" class="list-group-item">
@@ -31,12 +29,10 @@
 				    	<?php echo html($item->title()) ?>
 				    </a>
 				    <?php endforeach ?>
-				  </ul>
+				  </div>
 				<?php endif ?>
 			</div>
-		
 		</div>
-
 	</div>
  </body>
 </html>
