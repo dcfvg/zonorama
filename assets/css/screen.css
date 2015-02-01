@@ -4823,7 +4823,7 @@ a.list-group-item:hover,
 a.list-group-item:focus {
   text-decoration: none;
   color: #555555;
-  background-color: #f5f5f5;
+  background-color: #fee1d6;
 }
 .list-group-item.disabled,
 .list-group-item.disabled:hover,
@@ -6169,11 +6169,22 @@ body {
   overflow: hidden;
   text-align: center;
 }
+.badge {
+  background-color: #ce3d07;
+}
+hr {
+  border-top: 1px dashed #ce3d07;
+}
+*,
+a,
+a:hover {
+  color: #ce3d07;
+}
 #menu {
   position: absolute;
   right: 0;
   top: 0;
-  width: 10%;
+  width: 15%;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -6184,7 +6195,7 @@ body {
   width: 100%;
 }
 #slideshow {
-  width: 90%;
+  width: 85%;
   height: 100%;
   overflow: hidden;
 }

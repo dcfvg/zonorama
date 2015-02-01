@@ -9,11 +9,13 @@
 <body>
 	<div id="slideshow"></div>
 	<div id="menu">
+		<h3> <a href="/"><?php echo $site->title() ?></a> </h3>
+		<hr>
 		<h4><?php echo $page->title() ?></h4>
 		<hr>
 		<?php foreach($page->images() as $image): ?>
 			<?php $id++; ?>
-			<img id="img<?php echo $id ?>" src="<?php echo thumb($image, array('height' => 600), false); ?>" width="50">
+			<img id="img<?php echo $id ?>" src="<?php echo thumb($image, array('height' => 800), false); ?>" width="50">
 			<?php endforeach ?>
 		<hr>
 	</div>
