@@ -6,7 +6,7 @@
   <?php echo css('/assets/css/screen.css') ?>
 </head>
 <body id="home">
-	<div id="container">
+	<div class="container-fluid">
 		<div class="row">
 			<h2 class="col-sm-9"><?php echo $page->title() ?></h2>
 
