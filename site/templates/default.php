@@ -15,7 +15,7 @@
 		<hr>
 		<?php foreach($page->images() as $image): ?>
 			<?php $id++; ?>
-			<img id="img<?php echo $id ?>" src="<?php echo thumb($image, array('height' => 800), false); ?>" width="50">
+			<img id="img<?php echo $id ?>" src="<?php echo thumb($image, array('height' => 650), false); ?>" width="50">
 			<?php endforeach ?>
 		<hr>
 	</div>
