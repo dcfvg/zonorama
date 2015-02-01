@@ -4,7 +4,7 @@ jQuery(document).ready(function($) {
 
 	$( "#menu img" ).click(function() {
 		var id = $( this ).attr("id");
-		var scr = $( this ).attr("src");
+		var scr = $( this ).attr("srcHD");
 		var num = $slideshow.children().length;
 		var cssId = id+'-'+num;
 
