@@ -28,23 +28,17 @@
 			<hr>
 		</div>
 		<?php else: ?>
-			<?php foreach($page->images() as $img): ?>
-								<hr>
+			<?php  $img = $page->images()->first() ?>
+					<div>
+						<img 
+						class = "parent"
+						hash	= "<?=$img->hash()?>" 
+						name	= "<?=$img->filename() ?>" 
+						src = "<?=thumb($img, array('height' => 650, 'upscale'   => true), false); ?>"
+						url   = "<?=$img->url() ?>"
+						uri 	= "<?=$page->uri() ?>">
 
-					<img 
-					hash	= "<?=$img->hash()?>" 
-					name	= "<?=$img->filename() ?>" 
-					src = "<?=thumb($img, array('height' => 150, 'upscale'   => true), false); ?>"
-					url   = "<?=$img->url() ?>"
-					uri 	= "<?=$page->uri() ?>">
-
-					<?php foreach(json_decode($img->zones()) as $zone): ?>
-						<?php 
-							$background= $page->files()->find($zone->name)
-						?>
-						<?=thumb($background, array('height' => 60, 'upscale'   => true)); ?>
-					<?php endforeach ?>
-			<?php endforeach ?>
+					</div>
 		<?php endif ?>
 
 	<?=js('/assets/js/jquery-2.1.0.min.js'); ?>

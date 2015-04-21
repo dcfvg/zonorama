@@ -4,8 +4,15 @@ jQuery(document).ready(function($) {
 
 		console.log("update", $this.attr("name"));
 
+		var image  = $(".full").first();
+		var parent = {
+			id 		: image.attr("id"),
+			hash 	: image.attr("hash"),
+			name 	: image.attr("name"),
+			url 	: image.attr("url"),
+			uri 	: image.attr("uri")
+		}
 		var zones = [];
-
 		$.each($(".zone").not( ".full" ), function() {
 
 			var zone = {
@@ -16,31 +23,84 @@ jQuery(document).ready(function($) {
 				uri 	: $(this).prev().attr("uri"),
 
 				top 	: $(this).css('top'), 
-				left 	: $(this).css('top'),
+				left 	: $(this).css('left'),
 				width : $(this).width(),
 				height: $(this).height()
 			}
 			zones.push(zone);
 
 		});
-		
-		console.log(zones);
-		$.post('/api', {
-			parent: {
-				id 		: $this.prev().attr("id"),
-				hash 	: $this.prev().attr("hash"),
-				name 	: $this.prev().attr("name"),
-				url 	: $this.prev().attr("url"),
-				uri 	: $this.prev().attr("uri"),
-			},
-			zones : zones
-		})
+		$.post('/api', 
+			{	op : "writeZones",
+				q :
+				{
+					parent: parent,
+					zones : zones
+				}
+			}
+		)
 		.done(function( data ) {
-			console.log(data.data[0].q);
-			//console.log(data);
+			//console.log(data.data[0].q);
+			console.log(data);
 		});
 	};
-	
+	function addZones($this){
+		$.post('/api', 
+			{	op : "getZones",
+				q :
+				{
+					parent: {
+						id 		: $this.attr("id"),
+						hash 	: $this.attr("hash"),
+						name 	: $this.attr("name"),
+						url 	: $this.attr("url"),
+						uri 	: $this.attr("uri"),
+					}
+				}
+			}
+		)
+		.done(function( data ) {
+
+
+			$.each(data, function() {
+				console.log(this);
+
+				$('<div>', 
+					{
+						hash 	: this.hash,				
+						name 	:	this.name,
+						url		: this.url,
+						uri		: this.uri
+					}
+				)
+
+				.addClass("zone")
+				.css('background-position', ("-"+this.left) + " -" +(this.top))
+				.css('background-image','url('+this.url+')')
+				.css('position', 'absolute')
+				.css('width', this.width)
+				.css('height', this.height)
+				.css('top', this.top)
+				.css('left', this.left)
+				.appendTo($slideshow)
+
+				console.log($this);
+
+			});
+
+
+		});
+
+
+
+
+
+	};
+
+	$.each($("body").not( ".user" ).find(".parent"), function() {
+		addZones($(this));
+	})
+
 	var $slideshow = $("#slideshow");
 
 	$( "#menu img" ).click(function() {
