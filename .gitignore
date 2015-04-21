@@ -3,3 +3,5 @@
 .DS_Store
 
 /thumbs/
+
+/site/accounts/*.php
