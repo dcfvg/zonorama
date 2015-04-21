@@ -1,9 +1,30 @@
 jQuery(document).ready(function($) {
 
-	function uptZone($this){
+	function uptZones($this){
 
 		console.log("update", $this.attr("name"));
 
+		var zones = [];
+
+		$.each($(".zone"), function() {
+
+			var zone = {
+				id 		: $(this).attr("id"),
+				hash 	: $(this).attr("hash"),
+				name 	: $(this).attr("name"),
+				url 	: $(this).attr("url"),
+				uri 	: $(this).prev().attr("uri"),
+
+				top 	: $(this).css('top'), 
+				left 	: $(this).css('top'),
+				width : $(this).width(),
+				height: $(this).height()
+			}
+			zones.push(zone);
+
+		});
+		
+		console.log(zones);
 		$.post('/api', {
 			parent: {
 				id 		: $this.prev().attr("id"),
@@ -12,23 +33,11 @@ jQuery(document).ready(function($) {
 				url 	: $this.prev().attr("url"),
 				uri 	: $this.prev().attr("uri"),
 			},
-			zones : {
-
-				id 		: $this.attr("id"),
-				hash 	: $this.attr("hash"),
-				name 	: $this.attr("name"),
-				url 	: $this.attr("url"),
-				uri 	: $this.prev().attr("uri"),
-
-				top 	: $this.css('top'), 
-				left 	: $this.css('top'),
-				width : $this.width(),
-				height: $this.height()
-			}
+			zones : zones
 		})
 		.done(function( data ) {
-			// console.log(data.data[0].q);
-			console.log(data);
+			console.log(data.data[0].q);
+			//console.log(data);
 		});
 	};
 	
@@ -54,7 +63,7 @@ jQuery(document).ready(function($) {
 		.css('background-image','url('+scr+')')
 		.resizable({
 			stop: function() {
-				uptZone($(this));
+				uptZones($(this));
 			}
 		})
 		.draggable({
@@ -62,7 +71,7 @@ jQuery(document).ready(function($) {
 				$( this ).css('background-position', (-ui.position.left)+"px "+ (-ui.position.top+"px "));
 			},
 			stop: function() {
-				uptZone($(this));
+				uptZones($(this));
 			}
 		})
 		.hover(
