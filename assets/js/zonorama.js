@@ -6,7 +6,7 @@ jQuery(document).ready(function($) {
 
 		var zones = [];
 
-		$.each($(".zone"), function() {
+		$.each($(".zone").not( ".full" ), function() {
 
 			var zone = {
 				id 		: $(this).attr("id"),
