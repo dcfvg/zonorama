@@ -2,25 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title><?php echo $site->title()->html() ?> | <?php echo $page->title()->html() ?></title>
-  <?php echo css('/assets/js/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css ') ?>
-  <?php echo css('/assets/css/screen.css') ?>
+  <title><?=$site->title()->html() ?> | <?=$page->title()->html() ?></title>
+  <?=css('/assets/js/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css ') ?>
+  <?=css('/assets/css/screen.css') ?>
 </head>
 <body>
 	<div id="slideshow"></div>
 	<div id="menu">
-		<h3> <a href="/"><?php echo $site->title() ?></a> </h3>
+		<h3> <a href="/"><?=$site->title() ?></a> </h3>
 		<hr>
-		<h4><?php echo $page->title() ?></h4>
+		<h4><?=$page->title() ?></h4>
 		<hr>
-		<?php foreach($page->images() as $image): ?>
+		<?php foreach($page->images() as $img): ?>
 			<?php $id++; ?>
-			<img id="img<?php echo $id ?>" src="<?php echo thumb($image, array('width' => 150), false); ?>" srcHD="<?php echo thumb($image, array('height' => 650, 'upscale'   => true), false); ?>" width="50">
-			<?php endforeach ?>
+			<img 
+				hash	= "<?=$img->hash()?>" 
+				name	= "<?=$img->filename() ?>" 
+				src 	= "<?=thumb($img, array('width' => 150), false); ?>" 
+				srcHD = "<?=thumb($img, array('height' => 650, 'upscale'   => true), false); ?>"
+				url   = "<?=$img->url() ?>"
+				uri 	= "<?=$page->uri() ?>"
+				width = "50">
+		<?php endforeach ?>
 		<hr>
 	</div>
-	<?php echo js('/assets/js/jquery-2.1.0.min.js'); ?>
-	<?php echo js('/assets/js/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js'); ?>
-	<?php echo js('/assets/js/zonorama.js'); ?>	
+	<?=js('/assets/js/jquery-2.1.0.min.js'); ?>
+	<?=js('/assets/js/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js'); ?>
+	<?=js('/assets/js/zonorama.js'); ?>
  </body>
 </html>

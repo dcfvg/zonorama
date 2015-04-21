@@ -4,6 +4,19 @@ title: Page
 pages: true
 files:
 	sortable: true
+	fields:
+		caption:
+			label: caption
+			type:  text
+		year:
+			label: Année
+			type: date
+			format: YYYY
+			width: 1/2
+			default: today
+		zones:
+			label: Zones
+			type: textarea
 fields:
 	title:
 		label: Titre
