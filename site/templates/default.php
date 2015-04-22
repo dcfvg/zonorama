@@ -28,7 +28,7 @@
 			<hr>
 		</div>
 		<?php else: ?>
-			<?php  $img = $page->images()->first() ?>
+			<?php  $img = $page->images()->shuffle()->first() ?>
 					<div>
 						<img 
 						class = "parent"
