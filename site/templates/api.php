@@ -1,33 +1,27 @@
 <?php
 
-##if(!r::is_ajax()) notFound();
-
-// header('Content-type: application/json; charset=utf-8');
-
-// $json['data'][] = array(
-// 	'url'   => "oks",
-// 	'q' => $_POST
-// );
+//if(!r::is_ajax()) notFound();
 
 $op = $_POST["op"];
 
 switch ($op) {
 	case 'writeZones':
+		if($site->user()){
+			$p = $_POST["q"]["parent"];
+			$z = $_POST["q"]["zones"];
 
-		$p = $_POST["q"]["parent"];
-		$z = $_POST["q"]["zones"];
+			try {
+				$site->find($p["uri"])->files()->find($p["name"])->update(array(
+					'zones' => json_encode($z),
+				));
+				echo 'The meta info has been updated';
 
-
-		try {
-			$site->find($p["uri"])->files()->find($p["name"])->update(array(
-				'zones' => json_encode($z),
-			));
-			echo 'The meta info has been updated';
-
-		} catch(Exception $e) {
-				echo 'The meta info could not be updated';
-				echo $e->getMessage();
+			} catch(Exception $e) {
+					echo 'The meta info could not be updated';
+					echo $e->getMessage();
+			}
 		}
+
 	break;
 
 	case 'getZones':

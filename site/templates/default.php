@@ -14,6 +14,8 @@
 			<hr>
 			<h4><?=$page->title() ?></h4>
 			<hr>
+			
+			<p>on zone hover press SPACE <br>to go to the image </p>
 			<?php foreach($page->images() as $img): ?>
 				<?php $id++; ?>
 				<img 

@@ -15,7 +15,7 @@
 				<?php echo kirbytext($page->text()) ?>
 			</div>
 
-			<div class="col-sm-3">
+			<div class="col-sm-3" id="menu">
 				<hr>
 					<h3> <a href="/"><?php echo $site->title() ?></a> </h3>
 					<hr>

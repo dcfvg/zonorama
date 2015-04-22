@@ -1,6 +1,6 @@
 jQuery(document).ready(function($) {
 
-	function uptZones($this){
+	function uptZones($this){ // write new zones map into caption file
 
 		console.log("update", $this.attr("name"));
 
@@ -47,7 +47,7 @@ jQuery(document).ready(function($) {
 			console.log(data);
 		});
 	};
-	function addZones($this){
+	function getZone($this){ // get zones from caption file
 
 		console.log($this);
 		// ask for zones 
@@ -112,8 +112,7 @@ jQuery(document).ready(function($) {
 			});
 		});
 	};
-
-	function setEditMode(){
+	function setEditMode(){ // enable editor tools
 		$( "#menu img" ).click(function() {
 
 			var hash = $( this ).attr("hash");
@@ -150,23 +149,30 @@ jQuery(document).ready(function($) {
 			);
 		});
 	};
+	function nextImage(){ // go to the next image
+		$(".disable").remove();
+		$(".zone").addClass("full")
+		$(".ui-resizable").resizable('destroy').draggable('destroy');
+		setTimeout(function() {
+			getZone($(".full").last());
+		}, 500);
+	};
 
-	function nextImage(){
 
-			$(".disable").remove();
-			$(".zone").addClass("full")
-			$(".ui-resizable").resizable('destroy').draggable('destroy');
-			setTimeout(function() {
-				addZones($(".full").last());
-			}, 500);
+	function init() {
+		// get zone for the current image on page load
+		$.each($("body").not( ".user" ).find(".parent"), function() {
+			getZone($(this));
+		});
+
+
+		// setup editor bar
+		setEditMode();
+
 	}
 
-	$.each($("body").not( ".user" ).find(".parent"), function() {
-		addZones($(this));
-	})
-
 	var $slideshow = $("#slideshow");
-	setEditMode();
+	init();
 
 	// next image
 	$( "body" ).keypress(function( event ) {
