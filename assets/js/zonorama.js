@@ -156,7 +156,9 @@ jQuery(document).ready(function($) {
 			$(".disable").remove();
 			$(".zone").addClass("full")
 			$(".ui-resizable").resizable('destroy').draggable('destroy');
-			addZones($(".full").last());
+			setTimeout(function() {
+				addZones($(".full").last());
+			}, 500);
 	}
 
 	$.each($("body").not( ".user" ).find(".parent"), function() {
