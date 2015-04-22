@@ -47,7 +47,7 @@ jQuery(document).ready(function($) {
 			console.log(data);
 		});
 	};
-	function getZone($this){ // get zones from caption file
+	function getZones($this){ // get zones from caption file
 
 		console.log($this);
 		// ask for zones 
@@ -66,52 +66,54 @@ jQuery(document).ready(function($) {
 		)
 		.done(function( data ) {
 			$.each(data, function() {
-
-				var num = $slideshow.children().length;
-				var cssId = this.hash+'-'+num;
-				// create zones
-				$('<div>', 
-					{
-						hash 	: this.hash,				
-						name 	:	this.name,
-						url		: this.url,
-						uri		: this.uri,
-						src   : this.src,
-						id    : cssId
-					}
-				)
-				.addClass("zone disable")
-				.css('background-image','url('+this.src+')')
-				.css('position', 'absolute')
-				.css('width', this.width)
-				.css('height', this.height)
-				.css('top', this.top)
-				.css('left', this.left)
-				.appendTo($slideshow)
-				.hover(
-					function() { $( this ).not( ".full" ).removeClass( "disable" );}, 
-					function() { $( this ).not( ".full" ).addClass( "disable" );}
-				);
-				
-				$(".user #"+cssId) // NOT SAFE		
-				.resizable({
-					stop: function() {
-						uptZones($(this));
-					}
-				})
-				.draggable({
-					stop: function() {
-						uptZones($(this));
-					}
-				})
-
-				$("body:not(.user) #"+cssId).click(function() {
-					nextImage();
-				}) 
-
+				var zone = this;
+				createZone(zone);
 			});
 		});
 	};
+	function createZone(zone){
+		var num = $slideshow.children().length;
+		var cssId = zone.hash+'-'+num;
+		// create zones
+		$('<div>', 
+			{
+				hash 	: zone.hash,				
+				name 	:	zone.name,
+				url		: zone.url,
+				uri		: zone.uri,
+				src   : zone.src,
+				id    : cssId
+			}
+		)
+		.addClass("zone disable")
+		.css('background-image','url('+zone.src+')')
+		.css('position', 'absolute')
+		.css('width', zone.width)
+		.css('height', zone.height)
+		.css('top', zone.top)
+		.css('left', zone.left)
+		.appendTo($slideshow)
+		.hover(
+			function() { $( this ).not( ".full" ).removeClass( "disable" );}, 
+			function() { $( this ).not( ".full" ).addClass( "disable" );}
+		);
+		
+		$(".user #"+cssId) // NOT SAFE		
+		.resizable({
+			stop: function() {
+				uptZones($(this));
+			}
+		})
+		.draggable({
+			stop: function() {
+				uptZones($(this));
+			}
+		})
+
+		$("body:not(.user) #"+cssId).click(function() {
+			nextImage();
+		})
+	}
 	function setEditMode(){ // enable editor tools
 		$( "#menu img" ).click(function() {
 
@@ -154,21 +156,58 @@ jQuery(document).ready(function($) {
 		$(".zone").addClass("full")
 		$(".ui-resizable").resizable('destroy').draggable('destroy');
 		setTimeout(function() {
-			getZone($(".full").last());
+			getZones($(".full").last());
 		}, 500);
 	};
 
+	function genGraphviz(){
+		console.log("// gen-graph");
 
+		var links = "";
+
+		$.each($( "#menu img" ), function() {
+				var $this = $(this);
+
+				// ask for zones 
+				$.post('/api', 
+					{	op : "getZones",
+						q : {
+							parent: {
+								id 		: $this.attr("id"),
+								hash 	: $this.attr("hash"),
+								name 	: $this.attr("name"),
+								url 	: $this.attr("url"),
+								uri 	: $this.attr("uri"),
+							}
+						}
+					}
+				)
+				.done(function( data ) {
+					$.each(data, function() {
+						var zone = this;
+						
+						links = links + '"' + $this.attr("name") + '" [image="' + $this.attr("name") + '", label=""]; '
+						links = links + '"' + $this.attr("name") + '"->"' + zone.name + '";	';
+
+					});
+				});
+		});
+
+		setTimeout(function(){
+		console.log('digraph { label="\n\n'+ $("h4").text()+'";rankdir = "BT"; node[style="", shape="none", color=royalblue]; edge[color=royalblue]; layout=dot; size="33.1,46.8" '+links+'}');
+
+		}, 3000);
+
+
+	};
 	function init() {
 		// get zone for the current image on page load
 		$.each($("body").not( ".user" ).find(".parent"), function() {
-			getZone($(this));
+			getZones($(this));
 		});
-
-
 		// setup editor bar
 		setEditMode();
-
+		// genGraphviz();
 	}
 
 	var $slideshow = $("#slideshow");
@@ -176,9 +215,15 @@ jQuery(document).ready(function($) {
 
 	// next image
 	$( "body" ).keypress(function( event ) {
-		if ( event.which == 32 ) {
+
+		// console.log(event.which);
+		if ( event.which == 32 ) { // space is for next image
 			event.preventDefault();
 			nextImage();
+		}
+		if ( event.which == 103 ) { // g is for dot/graphiz
+			event.preventDefault();
+			genGraphviz();
 		}
 	});
 });

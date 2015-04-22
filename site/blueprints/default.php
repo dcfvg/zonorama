@@ -16,7 +16,7 @@ files:
 			default: today
 		zones:
 			label: Zones (ne pas modifier)
-			type: textarea
+			type: text
 			width: 1/2
 fields:
 	title:
