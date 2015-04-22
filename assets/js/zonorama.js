@@ -4,11 +4,13 @@ jQuery(document).ready(function($) {
 
 		console.log("update", $this.attr("name"));
 
-		var image  = $(".full").first();
+		var image  = $(".full").last();
+		console.log(image);
 		var parent = {
 			id 		: image.attr("id"),
 			hash 	: image.attr("hash"),
 			name 	: image.attr("name"),
+			src 	: image.attr("src"),
 			url 	: image.attr("url"),
 			uri 	: image.attr("uri")
 		}
@@ -20,6 +22,7 @@ jQuery(document).ready(function($) {
 				hash 	: $(this).attr("hash"),
 				name 	: $(this).attr("name"),
 				url 	: $(this).attr("url"),
+				src 	: $(this).attr("src"),
 				uri 	: $(this).prev().attr("uri"),
 
 				top 	: $(this).css('top'), 
@@ -45,10 +48,12 @@ jQuery(document).ready(function($) {
 		});
 	};
 	function addZones($this){
+
+		console.log($this);
+		// ask for zones 
 		$.post('/api', 
 			{	op : "getZones",
-				q :
-				{
+				q : {
 					parent: {
 						id 		: $this.attr("id"),
 						hash 	: $this.attr("hash"),
@@ -60,92 +65,112 @@ jQuery(document).ready(function($) {
 			}
 		)
 		.done(function( data ) {
-
-
 			$.each(data, function() {
-				console.log(this);
 
+				var num = $slideshow.children().length;
+				var cssId = this.hash+'-'+num;
+				// create zones
 				$('<div>', 
 					{
 						hash 	: this.hash,				
 						name 	:	this.name,
 						url		: this.url,
-						uri		: this.uri
+						uri		: this.uri,
+						src   : this.src,
+						id    : cssId
 					}
 				)
-
-				.addClass("zone")
-				.css('background-position', ("-"+this.left) + " -" +(this.top))
-				.css('background-image','url('+this.url+')')
+				.addClass("zone disable")
+				.css('background-image','url('+this.src+')')
 				.css('position', 'absolute')
 				.css('width', this.width)
 				.css('height', this.height)
 				.css('top', this.top)
 				.css('left', this.left)
 				.appendTo($slideshow)
+				.hover(
+					function() { $( this ).not( ".full" ).removeClass( "disable" );}, 
+					function() { $( this ).not( ".full" ).addClass( "disable" );}
+				);
+				
+				$(".user #"+cssId) // NOT SAFE		
+				.resizable({
+					stop: function() {
+						uptZones($(this));
+					}
+				})
+				.draggable({
+					stop: function() {
+						uptZones($(this));
+					}
+				})
 
-				console.log($this);
+				$("body:not(.user) #"+cssId).click(function() {
+					nextImage();
+				}) 
 
 			});
-
-
 		});
-
-
-
-
-
 	};
+
+	function setEditMode(){
+		$( "#menu img" ).click(function() {
+
+			var hash = $( this ).attr("hash");
+			var src = $( this ).attr("srcHD");
+			var num = $slideshow.children().length;
+			var cssId = hash+'-'+num;
+
+			$('<div>', 
+				{
+					id    : cssId,
+					hash 	: $( this ).attr("hash"),				
+					name 	:	$( this ).attr("name"),
+					url		: $( this ).attr("url"),
+					uri		: $( this ).attr("uri"),
+					src		: src
+				}
+			)	
+			.appendTo($slideshow)
+			.addClass("zone")
+			.css('background-image','url('+src+')')
+			.resizable({
+				stop: function() {
+					uptZones($(this));
+				}
+			})
+			.draggable({
+				stop: function() {
+					uptZones($(this));
+				}
+			})
+			.hover(
+				function() { $( this ).not( ".full" ).removeClass( "disable" );}, 
+				function() { $( this ).not( ".full" ).addClass( "disable" );}
+			);
+		});
+	};
+
+	function nextImage(){
+
+			$(".disable").remove();
+			$(".zone").addClass("full")
+			$(".ui-resizable").resizable('destroy').draggable('destroy');
+			addZones($(".full").last());
+	}
 
 	$.each($("body").not( ".user" ).find(".parent"), function() {
 		addZones($(this));
 	})
 
 	var $slideshow = $("#slideshow");
+	setEditMode();
 
-	$( "#menu img" ).click(function() {
-		var hash = $( this ).attr("hash");
-		var scr = $( this ).attr("srcHD");
-		var num = $slideshow.children().length;
-		var cssId = hash+'-'+num;
-
-		$('<div>', 
-			{
-				id    : cssId,
-				hash 	: $( this ).attr("hash"),				
-				name 	:	$( this ).attr("name"),
-				url		: $( this ).attr("url"),
-				uri		: $( this ).attr("uri")
-			}
-		)	
-		.appendTo($slideshow)
-		.addClass("zone")
-		.css('background-image','url('+scr+')')
-		.resizable({
-			stop: function() {
-				uptZones($(this));
-			}
-		})
-		.draggable({
-			drag: function( event, ui ) {
-				$( this ).css('background-position', (-ui.position.left)+"px "+ (-ui.position.top+"px "));
-			},
-			stop: function() {
-				uptZones($(this));
-			}
-		})
-		.hover(
-			function() { $( this ).not( ".full" ).removeClass( "disable" );}, 
-			function() { $( this ).not( ".full" ).addClass( "disable" );}
-		);
-	});
-
-	// set manual fullscreen
+	// next image
 	$( "body" ).keypress(function( event ) {
 		if ( event.which == 32 ) {
 			event.preventDefault();
-			$(".zone").remove(".disable");
-			$(".zone").not( ".disable" ).addClass("full").resizable('destroy').draggable('destroy');
+			nextImage();
 		}
 	});
 });

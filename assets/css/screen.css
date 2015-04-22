@@ -6203,6 +6203,7 @@ a:hover {
   height: 150px;
   background-color: white;
   background-repeat: no-repeat;
+  background-attachment: fixed;
   border: dashed 1px transparent;
 }
 .zone.disable {
@@ -6210,10 +6211,10 @@ a:hover {
   background: none !important;
 }
 .zone.full {
-  -webkit-transition: all .3s linear;
-  -moz-transition: all .3s linear;
-  -o-transition: all .3s linear;
-  transition: all .3s linear;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
   width: 100% !important;
   height: 100% !important;
   background-position: 0 0 !important;
